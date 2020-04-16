@@ -4,23 +4,12 @@ import styled from "styled-components";
 
 const Home: NextPage = () => (
   <>
-    <Header>
-      <img
-        src="https://demo.hasthemes.com/arden-preview/arden/assets/img/logo.png"
-        alt="Logo"
-      />
-    </Header>
     <Title>a simple yet beautiful portfolio homepage</Title>
     <Tiles></Tiles>
   </>
 );
 
 export default Home;
-
-export const Header = styled.header`
-  padding-right: 15px;
-  padding-left: 15px;
-`;
 
 export const Title = styled.h2`
   font-size: calc(1.5625rem + 3.75vw);
