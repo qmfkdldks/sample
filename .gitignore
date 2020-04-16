@@ -8,5 +8,3 @@
 node_modules/
 # Logs
 npm-debug.log*
-# Storybook
-.out
