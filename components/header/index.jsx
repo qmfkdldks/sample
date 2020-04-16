@@ -6,7 +6,7 @@ export const Container = styled.header`
   padding-left: 15px;
 `;
 
-const Header: React.FunctionComponent = () => (
+const Header = () => (
   <Container>
     <img
       src="https://demo.hasthemes.com/arden-preview/arden/assets/img/logo.png"
