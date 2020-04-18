@@ -1,14 +1,14 @@
 import styled from "styled-components";
+import Typed from "react-typed";
+import { up, down } from "styled-breakpoints";
+import { useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
+import withApollo from "../lib/graphql/withApollo";
 import Header from "../components/header";
 import ProductList from "../components/product-list";
 import Footer from "../components/footer";
-import { up, down } from "styled-breakpoints";
-import { useQuery } from "@apollo/react-hooks";
-import withApollo from "../lib/graphql/withApollo";
-import gql from "graphql-tag";
 import Spinner from "../components/spinner";
 import Contact from "../components/contact";
-import Typed from "react-typed";
 
 const Home = () => {
   const { loading, data } = useQuery(gql`
@@ -18,6 +18,7 @@ const Home = () => {
           node {
             id
             name
+            slug
             description
             pricing {
               priceRange {

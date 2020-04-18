@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { up } from "styled-breakpoints";
+import Link from "next/link";
 
 const masonryOptions = {
   transitionDuration: 10,
@@ -27,11 +28,6 @@ const Image = styled.img`
       width: 50%;
     }
   }
-
-  &:hover,
-  &:focus {
-    transform: scale3d(1.009, 1.009, 1);
-  }
 `;
 
 const Info = styled.div`
@@ -55,6 +51,10 @@ const Container = styled.div`
   position: relative;
   padding-right: 5px;
   padding-bottom: 2px;
+  &:hover,
+  &:focus {
+    transform: scale(1.01);
+  }
 `;
 
 const Card = styled.div`
@@ -110,6 +110,8 @@ const renderProducts = (products) => {
   return products.map(
     ({
       node: {
+        id,
+        slug,
         name,
         description,
         pricing: {
@@ -122,12 +124,17 @@ const renderProducts = (products) => {
         thumbnail,
         images,
       },
-    }) =>
-      thumbnail ? (
-        <ProductCard image={thumbnail.url} title={name} price={amount} />
-      ) : (
-        <TextCard description={description} title={name} price={amount} />
-      )
+    }) => (
+      <Link href="/product/[id]" as={`/product/${id}`}>
+        <a style={{ textDecoration: "none" }}>
+          {thumbnail ? (
+            <ProductCard image={thumbnail.url} title={name} price={amount} />
+          ) : (
+            <TextCard description={description} title={name} price={amount} />
+          )}
+        </a>
+      </Link>
+    )
   );
 };
 
