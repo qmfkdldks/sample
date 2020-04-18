@@ -1,23 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import { up, down } from "styled-breakpoints";
 
 const Contact = () => (
   <Container>
-    <Image src="https://cdn.dribbble.com/users/3989420/screenshots/11090203/media/196ebd1659ffbd5adf1dd6ea0ccf9621.png" />
+    <Title>Get in touch with us</Title>
     <Card>
-      <Title>Hey, This is your Weekly</Title>
       <Row>
-        <Subtitle>Address</Subtitle>
-        <Text>365 Gran Via de Corts, Catalanes, BA 08015</Text>
+        <Subtitle>VISIT OUR STUDIO AT</Subtitle>
+        <Text>365 Gran Via de Corts <br/> Catalanes, BA 08015</Text>
       </Row>
       <Row>
-        <Subtitle>Interested in working with us?</Subtitle>
+        <Subtitle>OR MESSAGE US</Subtitle>
         <Text>hola@ohio.colabr.io</Text>
-      </Row>
-      <Row>
-        <Subtitle>Phone</Subtitle>
-        <Text>Ph: +54 11 6890 5448</Text>
+        <Text>+54 11 2892 5596</Text>
       </Row>
     </Card>
   </Container>
@@ -26,38 +21,38 @@ const Contact = () => (
 export default Contact;
 
 const Container = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: 50px;
-`;
-
-const Image = styled.img`
   max-width: 1024px;
-  padding: 0px 50px;
-
-  ${down("tablet")} {
-    width: 100%;
-  }
+  margin: 0 auto;
+  font-family: Karla, sans-serif;
 `;
 
 const Card = styled.div`
-  max-width: 500px;
-  max-height: 500px;
-  background-color: #4582ae;
-  font-family: Karla, sans-serif;
-  color: #fff;
-  border-radius: 20px;
-  padding: 10px 55px;
-
-  ${down("tablet")} {
-    width: 100%;
-  }
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 const Row = styled.div``;
 
-const Title = styled.h1``;
-const Subtitle = styled.h1``;
-const Text = styled.p``;
+const Title = styled.h2`
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: #182141;
+  line-height: 1.2;
+`;
+
+const Subtitle = styled.h5`
+  color: #f2b636;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 1.5px;
+  margin-bottom: 27px;
+`;
+
+const Text = styled.h4`
+  font-size: 2rem;
+  font-weight: 400;
+  color: #182141;
+  line-height: 1.2;
+`;
