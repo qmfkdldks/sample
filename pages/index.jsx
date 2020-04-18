@@ -8,6 +8,7 @@ import withApollo from "../lib/graphql/withApollo";
 import gql from "graphql-tag";
 import Spinner from "../components/spinner";
 import Contact from "../components/contact";
+import Typed from "react-typed";
 
 const Home = () => {
   const { loading, data } = useQuery(gql`
@@ -17,6 +18,7 @@ const Home = () => {
           node {
             id
             name
+            description
             pricing {
               priceRange {
                 start {
@@ -44,6 +46,9 @@ const Home = () => {
             thumbnail {
               url
             }
+            images {
+              url
+            }
           }
         }
       }
@@ -54,7 +59,18 @@ const Home = () => {
     <div>
       <Header />
       <Background src="https://cdn.dribbble.com/users/146798/screenshots/5887398/sushi_4x.jpg?compress=1&resize=800x600" />
-      <Title>a simple yet beautiful portfolio homepage</Title>
+      <Title>
+        a simple yet portfolio homepage
+        <br />
+        <span style={{ color: "#182141" }}>
+          <Typed
+            strings={["beautiful", "disruptive"]}
+            typeSpeed={60}
+            backSpeed={50}
+            loop
+          />
+        </span>
+      </Title>
       <Tiles>
         {loading || !data ? (
           <Spinner />
