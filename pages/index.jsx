@@ -3,8 +3,74 @@ import Header from "../components/header";
 import ProductList from "../components/product-list";
 import Footer from "../components/footer";
 import { up, down } from "styled-breakpoints";
+import { useQuery } from "@apollo/react-hooks";
+import withApollo from "../lib/graphql/withApollo";
+import gql from "graphql-tag";
+import Spinner from "../components/spinner";
+import Contact from "../components/contact";
 
-export const Title = styled.h2`
+const Home = () => {
+  const { loading, data } = useQuery(gql`
+    {
+      products(first: 2) {
+        edges {
+          node {
+            id
+            name
+            pricing {
+              priceRange {
+                start {
+                  gross {
+                    amount
+                    currency
+                  }
+                }
+              }
+              discount {
+                gross {
+                  amount
+                  currency
+                }
+              }
+              priceRangeUndiscounted {
+                start {
+                  gross {
+                    amount
+                    currency
+                  }
+                }
+              }
+            }
+            thumbnail {
+              url
+            }
+          }
+        }
+      }
+    }
+  `);
+
+  return (
+    <div>
+      <Header />
+      <Background src="https://cdn.dribbble.com/users/146798/screenshots/5887398/sushi_4x.jpg?compress=1&resize=800x600" />
+      <Title>a simple yet beautiful portfolio homepage</Title>
+      <Tiles>
+        {loading || !data ? (
+          <Spinner />
+        ) : (
+          <ProductList products={data.products.edges} />
+        )}
+      </Tiles>
+      <Contact />
+      <Footer />
+    </div>
+  );
+};
+
+export default withApollo(Home);
+
+const Title = styled.h2`
   font-size: calc(1.5625rem + 3.75vw);
   color: #f2b636;
   font-weight: 700;
@@ -15,18 +81,13 @@ export const Title = styled.h2`
   padding-left: 15px;
 `;
 
-const Container = styled.div`
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-`;
-
 const Tiles = styled.div`
   max-width: 1024px;
   margin-right: auto;
   margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   ${up("desktop")} {
     margin-top: 130px;
@@ -47,26 +108,3 @@ const Background = styled.img`
     width: 100%;
   }
 `;
-
-const Image = styled.div`
-  max-width: 1024px;
-  margin-right: auto;
-  margin-left: auto;
-`;
-
-const Home = () => (
-  <div>
-    <Header />
-    <Background src="https://cdn.dribbble.com/users/146798/screenshots/5887398/sushi_4x.jpg?compress=1&resize=800x600" />
-    <Title>a simple yet beautiful portfolio homepage</Title>
-    <Tiles>
-      <ProductList />
-    </Tiles>
-    <Image>
-      <img src="https://cdn.dribbble.com/users/2167581/screenshots/4543535/cat_dribbble_v05-01.png" />
-    </Image>
-    <Footer />
-  </div>
-);
-
-export default Home;

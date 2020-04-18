@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { down, up } from "styled-breakpoints";
+import { up } from "styled-breakpoints";
 
 const masonryOptions = {
   transitionDuration: 10,
@@ -57,23 +57,48 @@ const Container = styled.div`
   padding-bottom: 2px;
 `;
 
+const ProductCard = ({ image, title, price }) => (
+  <>
+    <Container>
+      <Image src={image} />
+    </Container>
+    <Info>
+      <p className="title">{title}</p>
+      <p className="price">$ {price}</p>
+    </Info>
+  </>
+);
+
 const childElements = items.map((element, index) => {
-  return (
-    <>
-      <Container>
-        <Image key={index} src={element} />
-      </Container>
-      <Info>
-        <p className="title">Kimchi</p>
-        <p className="price">$ 245</p>
-      </Info>
-    </>
-  );
+  return <ProductCard image={element} title="kimchi" price="102.4" />;
 });
 
-const PrdocutList = () => (
+const renderProducts = (products) => {
+  return products.map(
+    ({
+      node: {
+        name,
+        pricing: {
+          priceRange: {
+            start: {
+              gross: { amount, currency },
+            },
+          },
+        },
+        thumbnail: {
+          url
+        }
+      },
+    }) => <ProductCard image={url} title={name} price={amount} />
+  );
+};
+
+const PrdocutList = ({ products }) => (
   <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
-    <Masonry options={masonryOptions}>{childElements}</Masonry>
+    <Masonry options={masonryOptions}>
+      {renderProducts(products)}
+      {childElements}
+    </Masonry>
   </ResponsiveMasonry>
 );
 
