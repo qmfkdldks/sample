@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Typed from "react-typed";
 import { up, down } from "styled-breakpoints";
@@ -9,11 +10,27 @@ import ProductList from "../components/product-list";
 import Footer from "../components/footer";
 import Spinner from "../components/spinner";
 import Contact from "../components/contact";
+import Categories from "../components/categories";
 
 const Home = () => {
+  const [selectedCategories, setCateogires] = useState([]);
+
   const { loading, data } = useQuery(gql`
-    {
-      products(first: 2) {
+  query($categories: [ID] = []) {
+    categories(first: 5) {
+        edges {
+          node {
+            backgroundImage {
+              url
+            }
+            id
+            name
+            description
+          }
+        }
+      }
+
+      products(first: 5, filter: { categories: $categories }) {
         edges {
           node {
             id
@@ -54,7 +71,9 @@ const Home = () => {
         }
       }
     }
-  `);
+  `, {
+    variables: { categories: selectedCategories },
+  });
 
   return (
     <div>
@@ -76,8 +95,11 @@ const Home = () => {
         {loading || !data ? (
           <Spinner />
         ) : (
-          <ProductList products={data.products.edges} />
-        )}
+            <>
+              <Categories categories={data.categories.edges} setCateogires={setCateogires} />
+              <ProductList products={data.products.edges} />
+            </>
+          )}
       </Tiles>
       <Contact />
       <Footer />
