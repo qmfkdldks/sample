@@ -8,83 +8,46 @@ import withApollo from "../lib/graphql/withApollo";
 import Header from "../components/header";
 import ProductList from "../components/product-list";
 import Footer from "../components/footer";
-import Spinner from "../components/spinner";
 import Contact from "../components/contact";
 import Categories from "../components/categories";
+// GraphQL Queries
+import ShopQuery from "../lib/graphql/queries/shop";
+import CategoriesQuery from "../lib/graphql/queries/categories";
+import ProductsQuery from "../lib/graphql/queries/products";
 
 const Home = () => {
+  // Get products given selected categories
   const [selectedCategories, setCateogires] = useState([]);
 
-  const { loading, data } = useQuery(gql`
-  query($categories: [ID] = []) {
-    categories(first: 5) {
-        edges {
-          node {
-            backgroundImage {
-              url
-            }
-            id
-            name
-            description
-          }
-        }
+  const { loading, data } = useQuery(
+    gql`
+      query($categories: [ID] = []) {
+        ${CategoriesQuery}
+        ${ProductsQuery}
       }
-
-      products(first: 5, filter: { categories: $categories }) {
-        edges {
-          node {
-            id
-            name
-            slug
-            description
-            pricing {
-              priceRange {
-                start {
-                  gross {
-                    amount
-                    currency
-                  }
-                }
-              }
-              discount {
-                gross {
-                  amount
-                  currency
-                }
-              }
-              priceRangeUndiscounted {
-                start {
-                  gross {
-                    amount
-                    currency
-                  }
-                }
-              }
-            }
-            thumbnail {
-              url
-            }
-            images {
-              url
-            }
-          }
-        }
-      }
+    `,
+    {
+      variables: { categories: selectedCategories },
     }
-  `, {
-    variables: { categories: selectedCategories },
-  });
+  );
+
+  const shopData = useQuery(
+    gql`
+    query {
+      ${ShopQuery}
+    }
+    `
+  );
 
   return (
     <div>
       <Header />
       <Background src="https://cdn.dribbble.com/users/146798/screenshots/5887398/sushi_4x.jpg?compress=1&resize=800x600" />
       <Title>
-        a simple yet portfolio homepage
-        <br />
+        Recetas diferentes, repletas de sabores coreanos <br />
         <span style={{ color: "#182141" }}>
           <Typed
-            strings={["beautiful", "disruptive"]}
+            strings={["Sanos", "Ricos"]}
             typeSpeed={60}
             backSpeed={50}
             loop
@@ -92,16 +55,14 @@ const Home = () => {
         </span>
       </Title>
       <Tiles>
-        {loading || !data ? (
-          <Spinner />
-        ) : (
-            <>
-              <Categories categories={data.categories.edges} setCateogires={setCateogires} />
-              <ProductList products={data.products.edges} />
-            </>
-          )}
+        <Categories
+          loading={loading}
+          data={data}
+          setCateogires={setCateogires}
+        />
+        <ProductList loading={loading} data={data} />
       </Tiles>
-      <Contact />
+      <Contact loading={shopData.loading} data={shopData.data} />
       <Footer />
     </div>
   );
