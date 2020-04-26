@@ -1,5 +1,6 @@
 import React from "react";
-import { storiesOf } from "@storybook/react";
-import Header from "./index";
+import Component from "./index";
 
-storiesOf("Header", module).add("default", () => <Header />);
+export default { title: "Header" };
+
+export const withDefault = () => <Component />;
