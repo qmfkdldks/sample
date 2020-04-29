@@ -10,9 +10,7 @@ const masonryOptions = {
 
 const ProductCard = ({ image, title, price }) => (
   <>
-    <Container>
-      <Image src={image} />
-    </Container>
+    <Image src={image} />
     <Info>
       <p className="title">{title}</p>
       <p className="price">$ {price}</p>
@@ -21,15 +19,13 @@ const ProductCard = ({ image, title, price }) => (
 );
 
 const TextCard = ({ title, description, price }) => (
-  <Container>
-    <Card>
-      <Title className="title">{title}</Title>
-      <Description>{description}</Description>
-      <Info>
-        <p className="price">$ {price}</p>
-      </Info>
-    </Card>
-  </Container>
+  <Card>
+    <Title className="title">{title}</Title>
+    <Description>{description}</Description>
+    <Info>
+      <p className="price">$ {price}</p>
+    </Info>
+  </Card>
 );
 
 const renderProducts = (products) => {
@@ -51,23 +47,27 @@ const renderProducts = (products) => {
         images,
       },
     }) => (
-      <Link href="/product/[id]" as={`/product/${id}`}>
-        <a style={{ textDecoration: "none" }}>
-          {thumbnail ? (
-            <ProductCard image={thumbnail.url} title={name} price={amount} />
-          ) : (
-            <TextCard description={description} title={name} price={amount} />
-          )}
-        </a>
-      </Link>
+      <Container>
+        <Link href="/product/[id]" as={`/product/${id}`}>
+          <a style={{ textDecoration: "none" }}>
+            {thumbnail ? (
+              <ProductCard image={thumbnail.url} title={name} price={amount} />
+            ) : (
+              <TextCard description={description} title={name} price={amount} />
+            )}
+          </a>
+        </Link>
+      </Container>
     )
   );
 };
 
 const PrdocutList = ({ products }) => (
-  <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
-    <Masonry options={masonryOptions}>{renderProducts(products)}</Masonry>
-  </ResponsiveMasonry>
+  <div style={{ width: "100%" }}>
+    <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
+      <Masonry options={masonryOptions}>{renderProducts(products)}</Masonry>
+    </ResponsiveMasonry>
+  </div>
 );
 
 export default PrdocutList;

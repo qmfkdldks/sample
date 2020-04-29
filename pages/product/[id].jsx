@@ -14,6 +14,7 @@ import Header from "../../components/header";
 import Spinner from "../../components/spinner";
 import Footer from "../../components/footer";
 import Contact from "../../components/contact";
+import ShopQuery from "../../lib/graphql/queries/shop";
 
 const GET_PRODUCT = gql`
   query($id: ID!) {
@@ -68,11 +69,7 @@ const renderDetail = (loading, data) => {
 
   return (
     <>
-      <Gallery>
-        {renderImages}
-        <Image src="https://demo.hasthemes.com/arden-preview/arden/assets/img/portfolio/details/01.jpg" />
-        <Image src="https://demo.hasthemes.com/arden-preview/arden/assets/img/portfolio/details/02.jpg" />
-      </Gallery>
+      <Gallery>{renderImages}</Gallery>
       <Detail>
         <Sticky>
           <Title>{name}</Title>
@@ -130,13 +127,21 @@ const ProductPage = () => {
     variables: { id: router.query.id },
   });
 
+  const shopData = useQuery(
+    gql`
+    query {
+      ${ShopQuery}
+    }
+    `
+  );
+
   return (
     <div>
       <Header />
       <Background src="https://cdn.dribbble.com/users/146798/screenshots/5887398/sushi_4x.jpg?compress=1&resize=800x600" />
       <HeaderTitle>a simple yet beautiful portfolio Product Page</HeaderTitle>
       <Container>{renderDetail(loading, data)}</Container>
-      <Contact />
+      <Contact loading={shopData.loading} data={shopData.data} />
       <Footer />
     </div>
   );
@@ -177,6 +182,8 @@ const Sticky = styled.div`
 `;
 
 const Image = styled.img`
+  max-width: 600px;
+
   ${down("tablet")} {
     width: 100%;
   }
