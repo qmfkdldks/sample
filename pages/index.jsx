@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import Typed from "react-typed";
 import { up, down } from "styled-breakpoints";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import { getDataFromTree } from '@apollo/react-ssr';
 import withApollo from "../lib/graphql/withApollo";
 import Header from "../components/header";
 import ProductList from "../components/product-list";
@@ -16,8 +17,7 @@ import CategoriesQuery from "../lib/graphql/queries/categories";
 import ProductsQuery from "../lib/graphql/queries/products";
 
 const Home = () => {
-  // Get products given selected categories
-  const [selectedCategories, setCateogires] = useState([]);
+  const { query: { page, category } } = useRouter()
 
   const { loading, data } = useQuery(
     gql`
@@ -27,7 +27,7 @@ const Home = () => {
       }
     `,
     {
-      variables: { categories: selectedCategories },
+      variables: { categories: [category] },
     }
   );
 
@@ -58,7 +58,6 @@ const Home = () => {
         <Categories
           loading={loading}
           data={data}
-          setCateogires={setCateogires}
         />
         <ProductList loading={loading} data={data} />
       </Tiles>
@@ -68,7 +67,7 @@ const Home = () => {
   );
 };
 
-export default withApollo(Home);
+export default withApollo(Home, { getDataFromTree });
 
 const Title = styled.h2`
   font-size: calc(1.5625rem + 3.75vw);

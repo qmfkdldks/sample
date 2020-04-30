@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { up, down } from "styled-breakpoints";
 import { useRouter } from "next/router";
+import { getDataFromTree } from '@apollo/react-ssr';
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import {
@@ -147,7 +148,7 @@ const ProductPage = () => {
   );
 };
 
-export default withApollo(ProductPage);
+export default withApollo(ProductPage, { getDataFromTree });
 
 const Icons = styled.div`
   margin: 0 15px;

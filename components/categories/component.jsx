@@ -1,23 +1,28 @@
 import React from "react";
+import Link from "next/link";
 import styled from "styled-components";
 
-const Categories = ({ categories, setCateogires }) => {
+const Categories = ({ categories }) => {
   const renderCategories = categories.map(
     ({ node: { id, backgroundImage, name } }) => (
-      <Icon onClick={() => setCateogires([id])}>
-        {backgroundImage && <img src={backgroundImage.url} />}
-        <Text>{name}</Text>
-      </Icon>
+      <Link key={id} href={`/?category=${id}`}>
+        <Icon>
+          {backgroundImage && <img src={backgroundImage.url} />}
+          <Text>{name}</Text>
+        </Icon>
+      </Link>
     )
   );
 
   return (
     <Container>
       <Icons>
-        <Icon onClick={() => setCateogires([])}>
-          <img src="https://recipe1.ezmember.co.kr/img/mobile/cate1_01.png" />
-          <Text>Todos</Text>
-        </Icon>
+        <Link href="/">
+          <Icon>
+            <img src="https://recipe1.ezmember.co.kr/img/mobile/cate1_01.png" />
+            <Text>Todos</Text>
+          </Icon>
+        </Link>
         {renderCategories}
       </Icons>
     </Container>
