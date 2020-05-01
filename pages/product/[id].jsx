@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { up, down } from "styled-breakpoints";
 import { useRouter } from "next/router";
-import { getDataFromTree } from '@apollo/react-ssr';
+import { getDataFromTree } from "@apollo/react-ssr";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import draftToHtml from "draftjs-to-html";
 import {
   FacebookSquare,
   Instagram,
@@ -23,7 +24,7 @@ const GET_PRODUCT = gql`
       id
       name
       slug
-      description
+      descriptionJson
       pricing {
         priceRange {
           start {
@@ -61,7 +62,7 @@ const renderDetail = (loading, data) => {
           },
         },
       },
-      description,
+      descriptionJson,
       images,
     },
   } = data;
@@ -74,11 +75,35 @@ const renderDetail = (loading, data) => {
       <Detail>
         <Sticky>
           <Title>{name}</Title>
-          <Text>{description}</Text>
-          <Title style={{ color: "#f2b636", alignSelf: "flex-end" }}>
+
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: draftToHtml(JSON.parse(descriptionJson)),
+            }}
+          />
+
+          <Price style={{ alignSelf: "flex-end" }}>
             {currency} $ {amount}
-          </Title>
-          <Button>Button</Button>
+          </Price>
+
+          <IconText>
+            <Icon>
+              <img
+                src="https://toppng.com/uploads/thumbnail//talk-icon-social-media-icon-png-and-vector-kakao-talk-11563402659kvm0uz6tpt.png"
+                alt="kakaotalk maum"
+              />
+            </Icon>
+            <Text> @maum</Text>
+          </IconText>
+          <IconText>
+            <Icon>
+              <img
+                src="https://cdn3.iconfinder.com/data/icons/social-media-chamfered-corner/154/whatsapp-512.png"
+                alt="kakaotalk maum"
+              />
+            </Icon>
+            <Text> +54 11 2696 1009</Text>
+          </IconText>
 
           <Row>
             <Attribute>
@@ -155,7 +180,8 @@ const Icons = styled.div`
 `;
 
 const Icon = styled.a`
-  svg {
+  svg,
+  img {
     width: 30px;
     color: #878c9b;
     &:hover {
@@ -199,6 +225,12 @@ const HeaderTitle = styled.h2`
   max-width: 58.333333%;
   padding-right: 15px;
   padding-left: 15px;
+
+  ${down("tablet")} {
+    flex: initial;
+    max-width: initial;
+    margin: auto;
+  }
 `;
 
 const Button = styled.a`
@@ -229,6 +261,10 @@ const Container = styled.div`
   justify-content: space-evenly;
   flex-wrap: wrap;
   margin: 150px auto;
+
+  ${down("tablet")} {
+    margin-top: 50px;
+  }
 `;
 
 const Row = styled.div`
@@ -248,6 +284,12 @@ const Title = styled.h4`
   line-height: 1.2;
 `;
 
+const Price = styled.h1`
+  font-family: Karla, sans-serif;
+  margin-bottom: 24px;
+  font-weight: 700;
+`;
+
 const Subtitle = styled.h4`
   font-family: Karla, sans-serif;
   color: #182141;
@@ -264,6 +306,16 @@ const Text = styled.p`
   line-height: 1.6;
 `;
 
+const IconText = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  ${Text} {
+    margin: 0 15px;
+  }
+`;
+
 const Background = styled.img`
   z-index: -1;
 
@@ -274,7 +326,6 @@ const Background = styled.img`
   }
 
   ${down("tablet")} {
-    position: relative;
-    width: 100%;
+    display: none;
   }
 `;
